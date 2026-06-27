@@ -111,9 +111,20 @@ export default function Wheel({ seed, questions }) {
 
           {nodes.map((n, i) => (
             <g key={"s" + i}>
-              <line x1={CX} y1={CY} x2={n.wx} y2={n.wy} stroke={n.color} strokeWidth="2.5" opacity="0.5" />
+              <line
+                className="w-spoke"
+                style={{ "--wd": `${120 + i * 30}ms` }}
+                pathLength="1"
+                x1={CX}
+                y1={CY}
+                x2={n.wx}
+                y2={n.wy}
+                stroke={n.color}
+                strokeWidth="2.5"
+                opacity="0.5"
+              />
               {n.leaves.map((l, j) => (
-                <g key={j}>
+                <g key={j} className="w-leaf" style={{ "--wd": `${360 + i * 30 + j * 45}ms` }}>
                   <line x1={n.wx} y1={n.wy} x2={l.x} y2={l.y} stroke={n.color} strokeWidth="1.2" opacity="0.32" />
                   <circle cx={l.x} cy={l.y} r="4" fill={n.color} />
                   <text
@@ -134,7 +145,7 @@ export default function Wheel({ seed, questions }) {
           ))}
 
           {nodes.map((n, i) => (
-            <g key={"w" + i}>
+            <g key={"w" + i} className="w-node" style={{ "--wd": `${230 + i * 30}ms` }}>
               <circle cx={n.wx} cy={n.wy} r="34" fill={n.color} opacity="0.16" />
               <circle cx={n.wx} cy={n.wy} r="27" fill={n.color} />
               <text
@@ -152,20 +163,24 @@ export default function Wheel({ seed, questions }) {
             </g>
           ))}
 
-          <circle cx={CX} cy={CY} r="62" fill={INK} opacity="0.1" />
-          <circle cx={CX} cy={CY} r="54" fill={INK} />
-          <text
-            x={CX}
-            y={CY}
-            dy="5"
-            textAnchor="middle"
-            fontSize="17"
-            fontWeight="800"
-            fontFamily={LABEL_FONT}
-            fill="#fff"
-          >
-            {clip(seed, 14)}
-          </text>
+          <g className="w-center">
+            <g className="w-center-pulse">
+              <circle cx={CX} cy={CY} r="62" fill={INK} opacity="0.1" />
+              <circle cx={CX} cy={CY} r="54" fill={INK} />
+            </g>
+            <text
+              x={CX}
+              y={CY}
+              dy="5"
+              textAnchor="middle"
+              fontSize="17"
+              fontWeight="800"
+              fontFamily={LABEL_FONT}
+              fill="#fff"
+            >
+              {clip(seed, 14)}
+            </text>
+          </g>
           <text x={VBX + VBW - 14} y={SIZE - 14} textAnchor="end" fontSize="12" fill="#c4bdb0">
             made with AskTheCrowd
           </text>

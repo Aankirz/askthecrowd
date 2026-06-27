@@ -98,7 +98,11 @@ body {
   transition: box-shadow var(--dur) var(--ease-out), transform var(--dur) var(--ease-out);
 }
 .searchbox:hover { transform: translateY(-1px); }
-.searchbox:focus-within { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+/* Soft accent halo instead of a hard offset ring — visible focus, not an eyesore */
+.searchbox:focus-within {
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-md), 0 0 0 4px oklch(60% 0.19 32 / 0.18);
+}
 .searchbox input {
   flex: 1;
   min-width: 0;
@@ -112,20 +116,27 @@ body {
 .searchbox input::placeholder { color: var(--color-ink-2); opacity: 0.7; }
 .searchbox button {
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   border: 0;
   background: var(--color-accent);
   color: var(--color-accent-ink);
   font-family: var(--ff-body);
   font-weight: 600;
   font-size: 1rem;
-  padding: 0 1.7rem;
+  padding: 0.7rem 1.5rem;
   border-radius: var(--radius-pill);
   cursor: pointer;
   box-shadow: var(--shadow-accent);
-  transition: filter var(--dur) var(--ease-out), transform var(--dur) var(--ease-out);
+  transition: filter var(--dur) var(--ease-out), transform 160ms var(--ease-out);
 }
 .searchbox button:hover { filter: brightness(1.06); transform: translateY(-1px); }
-.searchbox button:active { transform: translateY(0); }
+.searchbox button:active { transform: translateY(0) scale(0.97); }
+.searchbox button:disabled { cursor: progress; filter: none; }
+.searchbox button .arrow { transition: transform 200ms var(--ease-out); }
+.searchbox button:hover .arrow { transform: translateX(3px); }
+.searchbox button .spin { animation: none; } /* SMIL handles rotation */
 
 /* ── Hints / notices ───────────────────────────────────────── */
 .hint { text-align: center; color: var(--color-ink-2); margin-top: var(--space-xl); }
@@ -229,7 +240,7 @@ body {
   box-shadow: var(--shadow-sm);
   transition: box-shadow var(--dur) var(--ease-out), transform var(--dur) var(--ease-out);
 }
-.card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+.card:hover { box-shadow: var(--shadow-md); border-color: oklch(78% 0.09 40); }
 .card h3 {
   font-family: var(--ff-display);
   font-weight: 600;
@@ -279,10 +290,47 @@ body {
   border-top: 1px solid var(--color-rule);
 }
 
+/* ── Motion — entrance choreography (Premium: restrained, decelerate) ───── */
+@keyframes riseIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.brand { animation: riseIn 600ms var(--ease-out) both; }
+.tagline { animation: riseIn 600ms var(--ease-out) 110ms both; }
+.searchbox { animation: fadeIn 600ms var(--ease-out) 200ms both; } /* opacity only — keeps hover lift */
+.hint { animation: fadeIn 600ms var(--ease-out) 320ms both; }
+.examples a { animation: fadeIn 500ms var(--ease-out) both; }
+.examples a:nth-child(1) { animation-delay: 360ms; }
+.examples a:nth-child(2) { animation-delay: 420ms; }
+.examples a:nth-child(3) { animation-delay: 480ms; }
+.examples a:nth-child(4) { animation-delay: 540ms; }
+
+.resbar { animation: riseIn 500ms var(--ease-out) both; }
+.wheelwrap { animation: riseIn 600ms var(--ease-out) 80ms both; }
+.cols .card { animation: riseIn 520ms var(--ease-out) both; }
+.cols .card:nth-child(1) { animation-delay: 120ms; }
+.cols .card:nth-child(2) { animation-delay: 200ms; }
+.cols .card:nth-child(3) { animation-delay: 280ms; }
+.cols .card:nth-child(4) { animation-delay: 360ms; }
+.cols .card:nth-child(5) { animation-delay: 440ms; }
+
+/* ── Motion — wheel SVG draw-in (classes only; keyframes live here, so the
+   exported standalone SVG has no animation and always renders the final state) */
+@keyframes spokeDraw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes popIn { from { opacity: 0; transform: scale(0.4); } to { opacity: 1; transform: scale(1); } }
+@keyframes centerPop { from { opacity: 0; transform: scale(0.6); } to { opacity: 1; transform: scale(1); } }
+@keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+
+.wheel .w-spoke { stroke-dasharray: 1; animation: spokeDraw 520ms var(--ease-out) both; animation-delay: var(--wd, 0ms); }
+.wheel .w-node { transform-box: fill-box; transform-origin: center; animation: popIn 450ms var(--ease-out) both; animation-delay: var(--wd, 0ms); }
+.wheel .w-leaf { animation: fadeIn 380ms ease both; animation-delay: var(--wd, 0ms); }
+.wheel .w-center { transform-box: fill-box; transform-origin: center; animation: centerPop 520ms var(--ease-out) both; }
+.wheel .w-center-pulse { transform-box: fill-box; transform-origin: center; animation: breathe 4s ease-in-out 1.2s infinite; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
-  .searchbox:hover, .searchbox button:hover, .ghost:hover, .examples a:hover, .card:hover { transform: none; }
+  .searchbox:hover, .searchbox button:hover, .ghost:hover, .examples a:hover { transform: none; }
 }

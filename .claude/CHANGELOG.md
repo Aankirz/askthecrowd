@@ -20,3 +20,9 @@
 - Rebuilt globals.css: tokens, premium pill search w/ focus-within ring, raised hover cards with accent rules + modifier chips, refined footer/examples, reduced-motion guard.
 - Wheel retuned: harmonised palette, white ground, Inter labels, node halos, concentric guide rings, refined center, tighter label clip + per-spoke radius stagger to reduce collisions.
 - Tests 4/4, build green. QA via pixelbrowse component-by-component.
+
+## 2026-06-28 — Motion + SVG animation pass
+- Fixed search focus: replaced harsh offset outline with soft accent halo (the on-load eyesore).
+- Reveal button: animated arrow (nudges on hover), press squash, SVG spinner + "Revealing…" loading state (SearchBox now client).
+- Wheel SVG draw-in: spokes draw via stroke-dashoffset, nodes pop, leaves fade (staggered), center breathes — keyframes in CSS so PNG export stays final-state.
+- Hero/count/wheel/cards: staggered rise-in/fade entrance. Full reduced-motion guard.
