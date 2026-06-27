@@ -14,3 +14,9 @@
 - Repo created + pushed: https://github.com/Aankirz/askthecrowd
 - QA (2 parallel review agents + pixelbrowse visual): fixed wheel label clipping (viewBox padding, 3 leaves, wider spread), OG rate-limit bypass, unbounded rate-limiter map, CSV formula injection, Reddit NaN token TTL, suggest try/catch, LRU promotion; a11y: SVG role/title, focus-visible ring, reduced-motion, aria-labels, stable keys, conditional autofocus.
 - Tests 4/4 green, production build green, all routes verified (home/result/og/api).
+
+## 2026-06-28 — Hallmark redesign (premium modern-editorial)
+- Switched type to Fraunces (display) + Inter (body) via next/font; new warm-light OKLCH palette, vermilion accent, layered shadows, hero tint band.
+- Rebuilt globals.css: tokens, premium pill search w/ focus-within ring, raised hover cards with accent rules + modifier chips, refined footer/examples, reduced-motion guard.
+- Wheel retuned: harmonised palette, white ground, Inter labels, node halos, concentric guide rings, refined center, tighter label clip + per-spoke radius stagger to reduce collisions.
+- Tests 4/4, build green. QA via pixelbrowse component-by-component.
