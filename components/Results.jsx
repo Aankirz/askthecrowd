@@ -18,8 +18,8 @@ function Card({ title, map }) {
         <div className="sub" key={mod}>
           <span className="mod">{mod}</span>
           <ul>
-            {items.map((t, i) => (
-              <li key={i}>{t}</li>
+            {items.map((t) => (
+              <li key={t}>{t}</li>
             ))}
           </ul>
         </div>
@@ -33,8 +33,8 @@ function RedditPanel({ reddit }) {
     <div className="card reddit">
       <h3>Real questions on Reddit</h3>
       <ul className="redlist">
-        {reddit.map((p, i) => (
-          <li key={i}>
+        {reddit.map((p) => (
+          <li key={p.url}>
             <a href={p.url} target="_blank" rel="noreferrer">
               {p.title}
             </a>
@@ -55,7 +55,7 @@ export default function Results({ data }) {
     return <p className="notice">Nothing came back for “{seed}”. Try a broader keyword.</p>;
 
   return (
-    <section className="results">
+    <section className="results" aria-label={`Results for ${seed}`}>
       <div className="resbar">
         <p className="count">
           <strong>{total}</strong> suggestions for <em>“{seed}”</em>
@@ -75,8 +75,8 @@ export default function Results({ data }) {
           <div className="card">
             <h3>Related</h3>
             <ul>
-              {groups.related.map((t, i) => (
-                <li key={i}>{t}</li>
+              {groups.related.map((t) => (
+                <li key={t}>{t}</li>
               ))}
             </ul>
           </div>

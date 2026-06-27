@@ -10,9 +10,13 @@ const SIZE = 1000;
 const CX = SIZE / 2;
 const CY = SIZE / 2;
 const WORD_R = 165;
-const LEAF_R0 = 270;
-const LEAF_STEP = 42;
-const MAX_LEAVES = 5;
+const LEAF_R0 = 275;
+const LEAF_STEP = 50;
+const MAX_LEAVES = 3; // wheel is the gestalt; full lists live in the columns below
+// Horizontal padding so long leaf labels never clip at the frame edge.
+const PAD = 175;
+const VBX = -PAD;
+const VBW = SIZE + PAD * 2;
 
 const clip = (s, n = 34) => (s.length > n ? s.slice(0, n - 1) + "…" : s);
 
@@ -27,7 +31,7 @@ export default function Wheel({ seed, questions }) {
     const shown = items.slice(0, MAX_LEAVES);
     const leaves = shown.map((t, j) => {
       const r = LEAF_R0 + j * LEAF_STEP;
-      const spread = (j - (shown.length - 1) / 2) * 0.11;
+      const spread = (j - (shown.length - 1) / 2) * 0.26;
       const la = a + spread;
       const x = CX + Math.cos(la) * r;
       const y = CY + Math.sin(la) * r;
@@ -40,16 +44,17 @@ export default function Wheel({ seed, questions }) {
     const svg = ref.current;
     if (!svg) return;
     const xml = new XMLSerializer().serializeToString(svg);
-    const src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(xml)));
+    const src = URL.createObjectURL(new Blob([xml], { type: "image/svg+xml;charset=utf-8" }));
     const img = new Image();
     img.onload = () => {
+      URL.revokeObjectURL(src);
       const c = document.createElement("canvas");
-      c.width = SIZE;
+      c.width = VBW;
       c.height = SIZE;
       const ctx = c.getContext("2d");
       ctx.fillStyle = "#fffdf8";
-      ctx.fillRect(0, 0, SIZE, SIZE);
-      ctx.drawImage(img, 0, 0, SIZE, SIZE);
+      ctx.fillRect(0, 0, VBW, SIZE);
+      ctx.drawImage(img, 0, 0, VBW, SIZE);
       const a = document.createElement("a");
       a.download = `askthecrowd-${seed.replace(/\s+/g, "-")}.png`;
       a.href = c.toDataURL("image/png");
@@ -75,17 +80,25 @@ export default function Wheel({ seed, questions }) {
       <div className="wheelbar">
         <h2>The question wheel</h2>
         <div className="btnrow">
-          <button className="ghost small" onClick={exportSvg}>
+          <button type="button" aria-label="Download wheel as SVG" className="ghost small" onClick={exportSvg}>
             ↓ SVG
           </button>
-          <button className="ghost" onClick={exportPng}>
+          <button type="button" aria-label="Download wheel as PNG" className="ghost" onClick={exportPng}>
             ↓ PNG
           </button>
         </div>
       </div>
       <div className="wheelscroll">
-        <svg ref={ref} viewBox={`0 0 ${SIZE} ${SIZE}`} className="wheel" xmlns="http://www.w3.org/2000/svg">
-          <rect width={SIZE} height={SIZE} fill="#fffdf8" />
+        <svg
+          ref={ref}
+          viewBox={`${VBX} 0 ${VBW} ${SIZE}`}
+          className="wheel"
+          xmlns="http://www.w3.org/2000/svg"
+          role="img"
+          aria-labelledby="wheel-title"
+        >
+          <title id="wheel-title">{`Question wheel for "${seed}"`}</title>
+          <rect x={VBX} y={0} width={VBW} height={SIZE} fill="#fffdf8" />
 
           {nodes.map((n, i) => (
             <g key={"s" + i}>
@@ -124,7 +137,7 @@ export default function Wheel({ seed, questions }) {
           <text x={CX} y={CY} dy="5" textAnchor="middle" fontSize="17" fontWeight="800" fill="#fff">
             {clip(seed, 14)}
           </text>
-          <text x={SIZE - 14} y={SIZE - 14} textAnchor="end" fontSize="12" fill="#c4bdb0">
+          <text x={VBX + VBW - 14} y={SIZE - 14} textAnchor="end" fontSize="12" fill="#c4bdb0">
             made with AskTheCrowd
           </text>
         </svg>

@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 import { getResults } from "../../../lib/pipeline.js";
 import { topQuestions } from "../../../lib/export.js";
+import { rateLimit } from "../../../lib/cache.js";
 
 export const runtime = "nodejs";
 
@@ -8,10 +9,13 @@ export const runtime = "nodejs";
 // intentional — the highest-leverage share artifact, independent of the browser.
 export async function GET(req) {
   const q = (req.nextUrl.searchParams.get("q") || "").trim();
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
 
   let total = 0;
   let samples = [];
-  if (q) {
+  // Only run the expensive pipeline when within rate budget — otherwise still
+  // return a valid (generic) card so social scrapers never get an error.
+  if (q && rateLimit(ip, 30)) {
     try {
       const r = await getResults(q);
       total = r?.total || 0;
@@ -42,17 +46,17 @@ export async function GET(req) {
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ fontSize: 26, color: "#6b6358" }}>What people ask about</div>
           <div style={{ fontSize: 76, fontWeight: 800, color: "#1b1813", lineHeight: 1.05, marginTop: 8 }}>
-            “{q || "any keyword"}”
+            {`“${q || "any keyword"}”`}
           </div>
           {total > 0 && (
             <div style={{ fontSize: 30, color: "#d8442f", marginTop: 14 }}>
-              {total} questions & searches people make
+              {`${total} questions & searches people make`}
             </div>
           )}
           <div style={{ display: "flex", flexDirection: "column", marginTop: 26 }}>
             {samples.map((s, i) => (
               <div key={i} style={{ fontSize: 26, color: "#3a352d", marginTop: 6 }}>
-                • {s.length > 64 ? s.slice(0, 63) + "…" : s}
+                {`• ${s.length > 64 ? s.slice(0, 63) + "…" : s}`}
               </div>
             ))}
           </div>

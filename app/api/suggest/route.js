@@ -10,5 +10,9 @@ export async function GET(req) {
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
   if (!rateLimit(ip)) return NextResponse.json({ error: "rate limited" }, { status: 429 });
 
-  return NextResponse.json(await getResults(q));
+  try {
+    return NextResponse.json(await getResults(q));
+  } catch {
+    return NextResponse.json({ error: "unexpected error" }, { status: 500 });
+  }
 }

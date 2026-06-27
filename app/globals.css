@@ -79,6 +79,8 @@ body {
 }
 .searchbox button:hover { background: #b9351f; transform: translateY(-1px); }
 .searchbox button:active { transform: translateY(0); }
+.searchbox:focus-within { outline: 2px solid var(--accent); outline-offset: 3px; }
+.ghost:focus-visible, .examples a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 /* Hints / notices */
 .hint { text-align: center; color: var(--muted); margin-top: 2.5rem; }
@@ -210,4 +212,12 @@ body {
   margin-top: 3rem;
   padding-top: 1.5rem;
   border-top: 1px solid var(--line);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+  .searchbox button:hover { transform: none; }
 }

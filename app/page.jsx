@@ -41,7 +41,7 @@ export default async function Page({ searchParams }) {
         <p className="tagline">See what the internet is asking — for any keyword.</p>
       </header>
 
-      <SearchBox initial={seed} />
+      <SearchBox initial={seed} autoFocusInput={!data} />
 
       {limited && <p className="notice">Easy there — too many searches. Wait a minute and try again.</p>}
       {data && <Results data={data} />}

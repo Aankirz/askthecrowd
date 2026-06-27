@@ -1,14 +1,16 @@
 // Plain GET form -> navigates to /?q=... -> server re-renders. No client JS needed.
-export default function SearchBox({ initial }) {
+// autoFocus only on the empty state, so loading a result page doesn't yank focus
+// (and the viewport) to the top, away from the wheel.
+export default function SearchBox({ initial, autoFocusInput = true }) {
   return (
     <form method="GET" action="/" className="searchbox" role="search">
       <input
         name="q"
         defaultValue={initial}
         placeholder="Enter a keyword or phrase…"
-        aria-label="Keyword"
+        aria-label="Search keyword or phrase"
         autoComplete="off"
-        autoFocus
+        autoFocus={autoFocusInput}
         required
       />
       <button type="submit">Reveal</button>

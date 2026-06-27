@@ -11,7 +11,7 @@ export default function ExportCsv({ data }) {
     URL.revokeObjectURL(a.href);
   };
   return (
-    <button className="ghost small" onClick={download}>
+    <button type="button" aria-label="Download results as CSV" className="ghost small" onClick={download}>
       ↓ CSV
     </button>
   );
