@@ -35,6 +35,7 @@ export default async function Page({ searchParams }) {
   return (
     <main className="shell">
       <header className="masthead">
+        <span className="pill">open source · free · no login</span>
         <a className="brand" href="/">
           Ask<span>The</span>Crowd
         </a>

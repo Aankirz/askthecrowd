@@ -64,9 +64,19 @@ export default function Results({ data }) {
       </div>
 
       {Object.values(groups.questions).some((v) => v.length) && (
-        <Wheel seed={seed} questions={groups.questions} />
+        <>
+          <div className="marker">
+            <span className="lbl">visual map</span>
+            <span>[ 01 / 02 ]</span>
+          </div>
+          <Wheel seed={seed} questions={groups.questions} />
+        </>
       )}
 
+      <div className="marker">
+        <span className="lbl">full breakdown</span>
+        <span>[ 02 / 02 ]</span>
+      </div>
       <div className="cols">
         {GROUPS.map(([key, label]) => (
           <Card key={key} title={label} map={groups[key]} />

@@ -2,14 +2,16 @@
 import { useRef } from "react";
 
 // ponytail: SVG + trig radial, no D3. Add d3-shape only if the layout fights back.
-// Palette harmonised with the vermilion accent — warm-leaning, distinct hues.
+// superdesign one-accent system: a cool blue/indigo/cyan/teal family — distinct
+// spokes that still read as a single blue system, not a rainbow.
 const COLORS = [
-  "#e0533a", "#e08a2e", "#cf9b3a", "#6ba368", "#3fa392", "#3d87c9",
-  "#5b6ee0", "#8a63d2", "#c75ca6", "#d6517a", "#c2563f", "#4a9d7f", "#7d8cc4",
+  "#0562ef", "#2b7cff", "#5a93ff", "#0aa2c0", "#1aa7a0", "#3d6bd6",
+  "#6a5af0", "#0b86d8", "#4f86ff", "#2bb5b0", "#7c5cf0", "#1f6fe0", "#3aa0e8",
 ];
-const LABEL_FONT = "Inter, ui-sans-serif, system-ui, sans-serif";
+const LABEL_FONT = "'DM Sans', ui-sans-serif, system-ui, sans-serif";
 const PAPER = "#ffffff";
-const INK = "#2a241f";
+const INK = "#0b1015";
+const CENTER = "#001a4d";
 const SIZE = 1000;
 const CX = SIZE / 2;
 const CY = SIZE / 2;
@@ -106,8 +108,8 @@ export default function Wheel({ seed, questions }) {
           <rect x={VBX} y={0} width={VBW} height={SIZE} fill={PAPER} />
 
           {/* faint concentric guide rings for depth */}
-          <circle cx={CX} cy={CY} r={WORD_R + 8} fill="none" stroke="#efe9e0" strokeWidth="1" />
-          <circle cx={CX} cy={CY} r={LEAF_R0 + LEAF_STEP} fill="none" stroke="#f3ede4" strokeWidth="1" />
+          <circle cx={CX} cy={CY} r={WORD_R + 8} fill="none" stroke="#dfeafb" strokeWidth="1" />
+          <circle cx={CX} cy={CY} r={LEAF_R0 + LEAF_STEP} fill="none" stroke="#eaf2fd" strokeWidth="1" />
 
           {nodes.map((n, i) => (
             <g key={"s" + i}>
@@ -165,8 +167,8 @@ export default function Wheel({ seed, questions }) {
 
           <g className="w-center">
             <g className="w-center-pulse">
-              <circle cx={CX} cy={CY} r="62" fill={INK} opacity="0.1" />
-              <circle cx={CX} cy={CY} r="54" fill={INK} />
+              <circle cx={CX} cy={CY} r="62" fill={CENTER} opacity="0.12" />
+              <circle cx={CX} cy={CY} r="54" fill={CENTER} />
             </g>
             <text
               x={CX}
