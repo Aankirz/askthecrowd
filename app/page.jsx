@@ -48,20 +48,40 @@ export default async function Page({ searchParams }) {
       {data && <Results data={data} />}
 
       {!seed && (
-        <section className="hint">
-          <p>Try a keyword like</p>
-          <div className="examples">
-            {["ozempic", "remote work", "sourdough", "electric cars"].map((e) => (
-              <a key={e} href={`/?q=${encodeURIComponent(e)}`}>
-                {e}
-              </a>
-            ))}
-          </div>
-        </section>
+        <>
+          <section className="hint">
+            <p>Try a keyword like</p>
+            <div className="examples">
+              {["ozempic", "remote work", "sourdough", "electric cars"].map((e) => (
+                <a key={e} href={`/?q=${encodeURIComponent(e)}`}>
+                  {e}
+                </a>
+              ))}
+            </div>
+          </section>
+
+          <section className="features" aria-label="How it works">
+            <div className="feat">
+              <div className="feat-icon">❓</div>
+              <h3>Questions people ask</h3>
+              <p>Who, what, why, how, when, where — every angle your audience is searching for.</p>
+            </div>
+            <div className="feat">
+              <div className="feat-icon">🔀</div>
+              <h3>Comparisons & alternatives</h3>
+              <p>Uncover vs., and, or, like — the comparisons your readers are already making.</p>
+            </div>
+            <div className="feat">
+              <div className="feat-icon">🎡</div>
+              <h3>Visual radial wheel</h3>
+              <p>Export a shareable SVG or PNG question map — built for content teams and SEO decks.</p>
+            </div>
+          </section>
+        </>
       )}
 
       <footer className="foot">
-        Open source · Google Autocomplete + Reddit · no login, no tracking
+        <strong>AskTheCrowd</strong> · Open source · Google Autocomplete + Reddit · no login, no tracking
       </footer>
     </main>
   );
